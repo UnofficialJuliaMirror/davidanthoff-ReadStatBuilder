@@ -1,0 +1,40 @@
+language: julia
+os:
+  - linux
+julia:
+  - 0.6
+notifications:
+  email: false
+git:
+  depth: 99999999
+cache:
+  timeout: 1000
+  directories:
+    - downloads
+env:
+  global:
+    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+    - BINARYBUILDER_AUTOMATIC_APPLE=false
+sudo: required
+
+# Before anything else, get the latest versions of things
+before_script:
+  - julia -e 'Pkg.clone("https://github.com/JuliaPackaging/BinaryProvider.jl")'
+  - julia -e 'Pkg.clone("https://github.com/JuliaPackaging/BinaryBuilder.jl"); Pkg.build()'
+
+script:
+  - julia build_tarballs.jl
+
+
+deploy:
+    provider: releases
+    api_key:
+        # Note; this api_key is only valid for davidanthoff/ReadStatBuilder; you need
+        # to make your own: https://docs.travis-ci.com/user/deployment/releases/
+        secure: HZMy/Unn2uyDvegZuT0cLAnSAoxWm5bO7Vy+W2BF5zq0BDeDHkHOL1FmRVRRKq1Cus8Vaz/je6fPYvbuLVrYtnzS+Aky2u/0WIdPTwWcx/jotc6bxUa+QlINnw//aTtwgSDpBcZch9bdLX+zUlq5HhGQos97L0A8fQZAyiVu1han1yyfhS4oV+mfjbJDxNYmfKClCG99Qk7Pr1JTAEnjerPPyCFeydd0Q3kHVgjrUb/ZhF3CwUBkkylJS8fsHo/usYs07zg5njgfpGjGFXtwAC7TsuEKLM2XCSZX+UfngWhDwiXkU87VmxTbEsTB32c2oQ9X+5vuwBVUQjPjf10YBP1UpZUV1bjR3WlZdojifsfvYhAe/cdu2C3k/r48NvxIk8ufljsN8S6zNZMt2aBUkHI9ukVSx/3k5/MiF3KhIXRehzEC0tnIsJNzj8V1olW6fRCqzEL9xOta5HufxHUqWD40gosOMJ0s5pxVZ/MlQb72R1njdzhzy0nfG86Jy021RYbJgoi81lwoD8yFyx+qPRQ2CoWJIZsTPc3GIyzPFCyRb0bQEWMPWIaJ7PFGoZuEDswlO3N86s6lGBiw78Z/8hJETRGA+UTs2jI0IgIR2KVrWzwlILcApt8jQHc7vwdTnyjscAajZO9cz4bcVqRUvs2MeqHT1et+xCiocGmzyqM=
+    file_glob: true
+    file: products/*
+    skip_cleanup: true
+    on:
+        repo: davidanthoff/ReadStatBuilder
+        tags: true
