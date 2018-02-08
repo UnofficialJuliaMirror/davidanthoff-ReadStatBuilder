@@ -2,11 +2,14 @@ using BinaryBuilder
 
 # These are the platforms built inside the wizard
 platforms = [
+    BinaryProvider.Linux(:i686, :glibc),
     BinaryProvider.Linux(:x86_64, :glibc),
-  BinaryProvider.Linux(:aarch64, :glibc),
-  BinaryProvider.Linux(:powerpc64le, :glibc),
-  BinaryProvider.MacOS(),
-  BinaryProvider.Windows(:x86_64)
+    BinaryProvider.Linux(:aarch64, :glibc),
+    BinaryProvider.Linux(:armv7l, :glibc),
+    BinaryProvider.Linux(:powerpc64le, :glibc),
+    BinaryProvider.MacOS(),
+    BinaryProvider.Windows(:i686),
+    BinaryProvider.Windows(:x86_64)
 ]
 
 
@@ -20,7 +23,7 @@ info("Building for $(join(triplet.(platforms), ", "))")
 # Collection of sources required to build libreadstat
 sources = [
     "https://github.com/WizardMac/ReadStat.git" =>
-    "77bc2309d8c3f4e58c4ad1a6f33687c8e595aa0f",
+    "8472131f5cb5d5882f05f1fc784bf9dbb501272a",
 ]
 
 script = raw"""
