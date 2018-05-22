@@ -1,25 +1,5 @@
 using BinaryBuilder
 
-# These are the platforms built inside the wizard
-platforms = [
-    BinaryProvider.Linux(:i686, :glibc),
-    BinaryProvider.Linux(:x86_64, :glibc),
-    BinaryProvider.Linux(:aarch64, :glibc),
-    BinaryProvider.Linux(:armv7l, :glibc),
-    BinaryProvider.Linux(:powerpc64le, :glibc),
-    BinaryProvider.MacOS(),
-    BinaryProvider.Windows(:i686),
-    BinaryProvider.Windows(:x86_64)
-]
-
-
-# If the user passed in a platform (or a few, comma-separated) on the
-# command-line, use that instead of our default platforms
-if length(ARGS) > 0
-    platforms = platform_key.(split(ARGS[1], ","))
-end
-info("Building for $(join(triplet.(platforms), ", "))")
-
 # Collection of sources required to build libreadstat
 sources = [
     "https://github.com/WizardMac/ReadStat.git" =>
@@ -30,25 +10,41 @@ script = raw"""
 cd $WORKSPACE/srcdir
 cd ReadStat/
 ./autogen.sh
-if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then ./configure --prefix=/ --host=$target CFLAGS="-I$DESTDIR/include" LDFLAGS="-L$DESTDIR/lib"; else ./configure --prefix=/ --host=$target; fi
+if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then ./configure --prefix=${prefix} --host=${target} CFLAGS="-I$DESTDIR/include" LDFLAGS="-L$DESTDIR/lib"; else ./configure --prefix=${prefix} --host=${target}; fi
 make
 make install
-
 """
 
-products = prefix -> [
-    ExecutableProduct(prefix,"readstat"),
-    LibraryProduct(prefix,"libreadstat")
+# These are the platforms we will build for by default, unless further
+# platforms are passed in on the command line.
+platforms = [
+    # Windows
+    Windows(:i686),
+    Windows(:x86_64),
+
+    # Hello linux my old friend
+    Linux(:i686, :glibc),
+    Linux(:x86_64, :glibc),
+    Linux(:aarch64, :glibc),
+    Linux(:armv7l, :glibc),
+    Linux(:powerpc64le, :glibc),
+
+    # Add some musl love
+    Linux(:i686, :musl),
+    Linux(:x86_64, :musl),
+
+    # The BSD's (FreeBSD put on hold until we fix the -fPIC debacle)
+    #FreeBSD(:x86_64),
+    MacOS(),
 ]
 
 dependencies = [
-"https://github.com/davidanthoff/IConvBuilder/releases/download/v1.15%2Bbuild.1/build.jl"]
+    "https://github.com/davidanthoff/IConvBuilder/releases/download/v1.15%2Bbuild.2/build.jl"
+]
 
-# Build the given platforms using the given sources
-hashes = autobuild(pwd(), "libreadstat", platforms, sources, script, products, dependencies=dependencies)
+products = prefix -> [
+    ExecutableProduct(prefix,"readstat", :readstat),
+    LibraryProduct(prefix,"libreadstat", :libreadstat)
+]
 
-if !isempty(get(ENV,"TRAVIS_TAG",""))
-    print_buildjl(pwd(), products, hashes,
-        "https://github.com/davidanthoff/ReadStatBuilder/releases/download/$(ENV["TRAVIS_TAG"])")
-end
-
+build_tarballs(ARGS, "FLAC", sources, script, platforms, products, dependencies)
