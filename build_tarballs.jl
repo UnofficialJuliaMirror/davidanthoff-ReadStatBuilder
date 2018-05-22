@@ -3,7 +3,7 @@ using BinaryBuilder
 # Collection of sources required to build libreadstat
 sources = [
     "https://github.com/WizardMac/ReadStat.git" =>
-    "8472131f5cb5d5882f05f1fc784bf9dbb501272a",
+    "7bced5b279486b92f362d97aa671241e787a809a",
 ]
 
 script = raw"""
@@ -47,4 +47,4 @@ products = prefix -> [
     LibraryProduct(prefix,"libreadstat", :libreadstat)
 ]
 
-build_tarballs(ARGS, "FLAC", sources, script, platforms, products, dependencies)
+build_tarballs(ARGS, "ReadStat", sources, script, platforms, products,  )
