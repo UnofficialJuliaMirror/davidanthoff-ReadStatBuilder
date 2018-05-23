@@ -47,4 +47,4 @@ products = prefix -> [
     LibraryProduct(prefix,"libreadstat", :libreadstat)
 ]
 
-build_tarballs(ARGS, "ReadStat", sources, script, platforms, products,  )
+build_tarballs(ARGS, "ReadStat", sources, script, platforms, products, dependencies)
