@@ -6,20 +6,11 @@ sources = [
     "7bced5b279486b92f362d97aa671241e787a809a",
 ]
 
-# script = raw"""
-# cd $WORKSPACE/srcdir
-# cd ReadStat/
-# ./autogen.sh
-# if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then ./configure --prefix=${prefix} --host=${target} CFLAGS="-I$DESTDIR/include" LDFLAGS="-L$DESTDIR/lib"; else ./configure --prefix=${prefix} --host=${target}; fi
-# make
-# make install
-# """
-
 script = raw"""
 cd $WORKSPACE/srcdir
 cd ReadStat/
 ./autogen.sh
-./configure --prefix=${prefix} --host=${target}
+if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then ./configure --prefix=${prefix} --host=${target} CFLAGS="-I$DESTDIR/include" LDFLAGS="-L$DESTDIR/lib"; else ./configure --prefix=${prefix} --host=${target}; fi
 make
 make install
 """
