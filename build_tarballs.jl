@@ -3,7 +3,7 @@ using BinaryBuilder
 # Collection of sources required to build libreadstat
 sources = [
     "https://github.com/WizardMac/ReadStat.git" =>
-    "7bced5b279486b92f362d97aa671241e787a809a",
+    "68d7a59a503466f23501bf85a7c515626a1af0ff",
 ]
 
 script = raw"""
@@ -17,29 +17,10 @@ make install
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line.
-platforms = [
-    # Windows
-    Windows(:i686),
-    Windows(:x86_64),
-
-    # Hello linux my old friend
-    Linux(:i686, :glibc),
-    Linux(:x86_64, :glibc),
-    Linux(:aarch64, :glibc),
-    Linux(:armv7l, :glibc),
-    Linux(:powerpc64le, :glibc),
-
-    # Add some musl love
-    Linux(:i686, :musl),
-    Linux(:x86_64, :musl),
-
-    # The BSD's (FreeBSD put on hold until we fix the -fPIC debacle)
-    #FreeBSD(:x86_64),
-    MacOS(),
-]
+platforms = supported_platforms()
 
 dependencies = [
-    "https://github.com/davidanthoff/IConvBuilder/releases/download/v1.15%2Bbuild.2/build.jl"
+    "https://github.com/davidanthoff/IConvBuilder/releases/download/v1.15%2Bbuild.3/build.jl"
 ]
 
 products = prefix -> [
