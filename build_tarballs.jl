@@ -1,5 +1,7 @@
 using BinaryBuilder
 
+version = v"0.1.1-dev"
+
 # Collection of sources required to build libreadstat
 sources = [
     "https://github.com/WizardMac/ReadStat.git" =>
@@ -28,4 +30,4 @@ products = prefix -> [
     LibraryProduct(prefix,"libreadstat", :libreadstat)
 ]
 
-build_tarballs(ARGS, "ReadStat", sources, script, platforms, products, dependencies)
+build_tarballs(ARGS, "ReadStat", version, sources, script, platforms, products, dependencies)
