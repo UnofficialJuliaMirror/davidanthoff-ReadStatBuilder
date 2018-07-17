@@ -5,7 +5,7 @@ version = v"0.1.1-dev"
 # Collection of sources required to build libreadstat
 sources = [
     "https://github.com/WizardMac/ReadStat.git" =>
-    "68d7a59a503466f23501bf85a7c515626a1af0ff",
+    "93a6349ad402faf59547f9d80f21a7955585ce01",
 ]
 
 script = raw"""
