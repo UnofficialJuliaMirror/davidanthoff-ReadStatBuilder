@@ -12,7 +12,7 @@ script = raw"""
 cd $WORKSPACE/srcdir
 cd ReadStat/
 ./autogen.sh
-if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then ./configure --prefix=${prefix} --host=${target} CFLAGS="-I$DESTDIR/include" LDFLAGS="-L$DESTDIR/lib"; else ./configure --prefix=${prefix} --host=${target}; fi
+if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then ./configure --prefix=${prefix} --host=${target} CFLAGS="-I$prefix/include" LDFLAGS="-L$prefix/lib"; else ./configure --prefix=${prefix} --host=${target}; fi
 make
 make install
 """
